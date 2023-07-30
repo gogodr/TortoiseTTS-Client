@@ -1,0 +1,20 @@
+--index-url https://download.pytorch.org/whl/cu118
+torch
+torchaudio
+rotary_embedding_torch
+
+tqdm
+transformers
+tokenizers
+inflect
+progressbar
+einops
+unidecode
+scipy
+librosa
+numba
+ffmpeg
+numpy
+threadpoolctl
+llvmlite
+appdirs

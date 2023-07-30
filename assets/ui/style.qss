@@ -1,0 +1,31 @@
+QMainWindow {
+  background-color: #393053;
+}
+
+QLabel {
+  color: white;
+}
+
+QToolButton{
+  background-color: #635985;
+  border-radius: 4px;
+  margin: 2px;
+}
+QPushButton {
+  background-color: #635985;
+  border-radius: 4px;
+  font: bold 14px;
+  min-width: 40px;
+  padding: 6px;
+  color: #202020;
+}
+
+QToolButton:hover,
+QPushButton:hover {
+  background-color: #a39ac4;
+}
+
+QToolButton:disabled,
+QPushButton:disabled {
+  background-color: #808080;
+}

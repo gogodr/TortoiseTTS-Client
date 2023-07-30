@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="icons">
+      <file>autorenew.png</file>
+      <file>pause.png</file>
+      <file>play_arrow.png</file>
+      <file>stop.png</file>
+      <file>skip_next.png</file>
+      <file>skip_previous.png</file>
+      <file>folder.png</file>
+    </qresource>
+  </RCC>
