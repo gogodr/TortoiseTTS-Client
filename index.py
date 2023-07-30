@@ -57,7 +57,7 @@ class TortoiseApp(QApplication):
 
     def load_voices(self):
         voices_folder_path = os.fspath(
-            Path(__file__).resolve().parent / "tortoise/voices")
+            Path(__file__).resolve().parent / "voices")
         if not os.path.exists(voices_folder_path):
             print("Error: The 'voices' folder does not exist.")
             return

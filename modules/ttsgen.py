@@ -4,9 +4,8 @@ import re
 import torch
 import torchaudio
 from modules.singleton import Singleton
+from PySide6.QtCore import QThread, Signal, QObject
 from tortoise.api import TextToSpeech
-from PySide6.QtCore import QThread, Signal, QBuffer, QObject
-
 from tortoise.utils.audio import load_voice
 
 
