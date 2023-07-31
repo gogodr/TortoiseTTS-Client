@@ -1,19 +1,33 @@
 import os
-import re
 import sys
+import shutil
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, 'w')
 from pathlib import Path
 from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import Qt
 from modules.main_form import MainForm
 from modules.music_player import MusicPlayer
-from tortoise.utils.audio import load_voice
 from modules.ttsgen import LoadTTSThread, TTSGeneratorThread
+from modules.splash import LoadingSplash
 
 from assets.resource.resource_rc import *
+
+if getattr(sys, 'frozen', False):
+    import pyi_splash
 
 
 class TortoiseApp(QApplication):
     def __init__(self, *args, **kwargs):
         QApplication.__init__(self, *args, **kwargs)
+
+        self.splash = LoadingSplash(os.fspath(Path(__file__).resolve(
+        ).parent / "assets/ui/loading.gif"), Qt.WindowStaysOnTopHint)
+        self.splash.show()
+        if getattr(sys, 'frozen', False):
+            pyi_splash.close()
+
+        self.init_check()
         self.main_window = MainForm()
         self.main_window.show()
         self.main_window.ui.generate_btn.setText("Loading TTS...")
@@ -26,14 +40,23 @@ class TortoiseApp(QApplication):
         self.load_tts_thread.signals.error.connect(self.on_load_tts_error)
         self.main_window.ui.generate_btn.clicked.connect(self.generate_audio)
 
-        self.main_window.ui.prompt_txt.setText("This is a test\nwith 2 lines, and 2 candidates")
+        self.main_window.ui.prompt_txt.setText(
+            "This is a test\nwith 2 lines, and 2 candidates")
         self.main_window.ui.samples_spin_box.setValue(2)
         self.main_window.ui.voices_reload_btn.clicked.connect(self.load_voices)
+
+    def init_check(self):
+        if not os.path.exists("voices"):
+            shutil.copytree(
+                os.fspath(Path(__file__).resolve().parent / "voices"), "voices", dirs_exist_ok=True)
+        if not os.path.exists("output"):
+            os.mkdir("output")
 
     def on_load_tts_finished(self):
         print("Finished loading TTS models.")
         self.main_window.ui.generate_btn.setText("Generate")
         self.main_window.ui.generate_btn.setEnabled(True)
+        self.splash.hide()
 
     def on_load_tts_error(self):
         print("Error loading TTS models.")
@@ -56,8 +79,7 @@ class TortoiseApp(QApplication):
         return False
 
     def load_voices(self):
-        voices_folder_path = os.fspath(
-            Path(__file__).resolve().parent / "voices")
+        voices_folder_path = "voices"
         if not os.path.exists(voices_folder_path):
             print("Error: The 'voices' folder does not exist.")
             return
@@ -77,10 +99,9 @@ class TortoiseApp(QApplication):
         self.main_window.ui.voices_list.setCurrentRow(0)
 
         self.main_window.ui.output_btn.clicked.connect(self.open_output_folder)
-    
+
     def open_output_folder(self):
-        output_folder_path = os.fspath(
-            Path(__file__).resolve().parent / "output")
+        output_folder_path = "output"
         if not os.path.exists(output_folder_path):
             print("Error: The 'output' folder does not exist.")
             return
@@ -97,27 +118,40 @@ class TortoiseApp(QApplication):
         candidates = self.main_window.ui.samples_spin_box.value()
         preset = self.main_window.ui.quality_combo_box.currentText()
         full_text = self.main_window.ui.prompt_txt.toPlainText()
-        self.gen_thread = TTSGeneratorThread(full_text, voice, preset, candidates)
+        self.gen_thread = TTSGeneratorThread(
+            full_text, voice, preset, candidates)
         self.gen_thread.signals.finished.connect(self.on_generate_finished)
         self.gen_thread.signals.progress.connect(self.on_generate_progress)
         self.main_window.ui.generate_btn.setEnabled(False)
         self.main_window.ui.generate_btn.setText("0%")
+        self.splash.show()
         self.gen_thread.start()
 
     def on_generate_finished(self, audio_results):
         self.main_window.ui.generate_btn.setText("Generate")
         self.main_window.ui.generate_btn.setEnabled(True)
+        self.splash.hide()
 
-        for i in reversed(range(self.main_window.ui.result_layout.count())): 
-            self.main_window.ui.result_layout.itemAt(i).widget().setParent(None)
+        for i in reversed(range(self.main_window.ui.result_layout.count())):
+            self.main_window.ui.result_layout.itemAt(
+                i).widget().setParent(None)
         for audio_result in audio_results:
             audio_sample = MusicPlayer()
             audio_sample.load_audio(audio_result)
             self.main_window.ui.result_layout.addWidget(audio_sample)
-    
+
     def on_generate_progress(self, progress):
         self.main_window.ui.generate_btn.setText(f"{progress}%")
         self.main_window.ui.generate_btn.setEnabled(False)
+
+    def copy_files(self, source_folder, destination_folder):
+        try:
+            if not os.path.exists(destination_folder):
+                os.makedirs(destination_folder)
+            shutil.copytree(source_folder, destination_folder)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
 
 if __name__ == "__main__":
     app = TortoiseApp([])

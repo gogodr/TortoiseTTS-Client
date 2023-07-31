@@ -26,3 +26,5 @@ tornado==4.2
 pydantic==1.9.1
 py-cpuinfo
 hjson
+py-splash
+Pillow

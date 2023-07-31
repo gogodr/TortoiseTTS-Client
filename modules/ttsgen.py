@@ -1,6 +1,5 @@
 from datetime import datetime
 import re
-
 import torch
 import torchaudio
 from modules.singleton import Singleton

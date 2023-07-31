@@ -1,3 +1,4 @@
+git submodule update --init --recursive
 python -m venv .venv
 if [[ "$OSTYPE" == "msys" ]]; then
     . .venv/Scripts/activate
