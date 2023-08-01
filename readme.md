@@ -1,6 +1,8 @@
 # Tortoise TTS Client App
 This app uses the TortoiseTTS project to generate audio based on simple voice clips as the source data and a prompt.
 
+![image](https://github.com/gogodr/TortoiseTTS-Client/assets/2740936/1a325730-3de3-4ab1-a887-c5041da6495b)
+
 # Installation
 clone this project using the following command 
 ```
