@@ -2,7 +2,6 @@
 if not "%1"=="STDOUT_TO_FILE"  %0 STDOUT_TO_FILE %*  >log.txt 2>&1
 shift /1
 
-:sub
 if not exist "tortoise-tts-client" (
     mkdir tortoise-tts-client
 )
@@ -23,13 +22,10 @@ if not exist "TortoiseTTS-Client" (
         )
         echo Extracting Git
         7z.exe x git.zip -ogit
-        del /s /q git.zip
-        del /s /q 7z.exe
     )
     cls
     echo Download TortoiseTTS-Client
     .\git\bin\git.exe clone --recursive git@github.com:gogodr/TortoiseTTS-Client.git
-    rmdir /s /q git
 )
 cls
 if not exist ".venv" (    
@@ -51,5 +47,3 @@ echo Install Pyinstaller
 .\.venv\Scripts\pip.exe install pyinstaller
 cls
 .\.venv\Scripts\pyinstaller.exe TortoiseTTS-Client\TortoiseTTSClient.spec
-rmdir /s /q .venv
-rmdir /s /q build
