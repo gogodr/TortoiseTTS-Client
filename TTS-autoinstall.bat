@@ -1,4 +1,8 @@
 @echo off
+call :sub >installation_log.txt
+exit /b
+
+:sub
 if not exist "tortoise-tts-client" (
     mkdir tortoise-tts-client
 )
