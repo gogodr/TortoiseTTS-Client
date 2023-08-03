@@ -1,6 +1,6 @@
 @echo off
-call :sub >installation_log.txt
-exit /b
+if not "%1"=="STDOUT_TO_FILE"  %0 STDOUT_TO_FILE %*  >log.txt 2>&1
+shift /1
 
 :sub
 if not exist "tortoise-tts-client" (
@@ -42,7 +42,10 @@ cls
 echo Install Python requirements
 .\.venv\Scripts\pip.exe install -r TortoiseTTS-Client\requirements.txt
 echo Install Tortoise TTS
+cd TortoiseTTS-Client\tts
 ..\..\.venv\Scripts\python.exe .\setup.py install
+cd ..
+cd ..
 cls
 echo Install Pyinstaller
 .\.venv\Scripts\pip.exe install pyinstaller
