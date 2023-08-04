@@ -25,7 +25,7 @@ if not exist "TortoiseTTS-Client" (
     )
     cls
     echo Download TortoiseTTS-Client
-    .\git\bin\git.exe clone --recursive git@github.com:gogodr/TortoiseTTS-Client.git
+    .\git\bin\git.exe clone --recursive https://github.com/gogodr/TortoiseTTS-Client.git
 )
 cls
 if not exist ".venv" (    
