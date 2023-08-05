@@ -46,4 +46,4 @@ cls
 echo Install Pyinstaller
 .\.venv\Scripts\pip.exe install pyinstaller
 cls
-.\.venv\Scripts\pyinstaller.exe TortoiseTTS-Client\TortoiseTTSClient.spec
+.\.venv\Scripts\pyinstaller.exe TortoiseTTS-Client\TortoiseTTSClientDebug.spec
