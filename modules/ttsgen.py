@@ -12,7 +12,7 @@ class TTSGen(metaclass=Singleton):
     tts: TextToSpeech = None
 
     def __init__(self):
-        self.tts = TextToSpeech()
+        self.tts = TextToSpeech(kv_cache=True, half=True)
 
     def generate_audio(self, text, voice, preset, folder, candidates=1):
         self.thread = TTSGeneratorThread(

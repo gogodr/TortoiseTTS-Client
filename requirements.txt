@@ -28,3 +28,5 @@ py-cpuinfo
 hjson
 py-splash
 Pillow
+PySide6
+setuptools_rust
